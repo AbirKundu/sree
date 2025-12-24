@@ -26,10 +26,10 @@
         .audio-btn.playing { background: linear-gradient(45deg, #ff6b9d, #c44569); }
 
         /* Password */
-        .password-page { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem; z-index: 10; }
-        .password-container { background: rgba(255,255,255,0.15); backdrop-filter: blur(30px); border-radius: 40px; padding: 5rem 4rem; box-shadow: 0 30px 60px rgba(0,0,0,0.4), 0 0 100px rgba(255,107,157,0.3); border: 1px solid rgba(255,255,255,0.3); max-width: 600px; width: 100%; animation: glowPulse 3s ease-in-out infinite alternate; }
+        .password-page { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem; z-index: 10; position: relative; }
+        .password-container { background: rgba(255,255,255,0.15); backdrop-filter: blur(30px); border-radius: 40px; padding: 5rem 4rem; box-shadow: 0 30px 60px rgba(0,0,0,0.4), 0 0 100px rgba(255,107,157,0.3); border: 1px solid rgba(255,255,255,0.3); max-width: 600px; width: 100%; animation: glowPulse 3s ease-in-out infinite alternate; position: relative; z-index: 100; }
         .password-title { font-family: 'Great Vibes', cursive; font-size: clamp(3.5rem, 10vw, 6.5rem); margin-bottom: 1.5rem; background: linear-gradient(45deg, #ff6b9d, #c44569, #f793a3, #ff9aa2); background-size: 300% 300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: gradientShift 4s ease infinite; }
-        .password-input { width: 100%; padding: 1.5rem 2.5rem; font-size: 1.4rem; border: 2px solid rgba(255,255,255,0.4); border-radius: 50px; background: rgba(255,255,255,0.95); text-align: center; margin-bottom: 1rem; font-family: inherit; box-shadow: 0 20px 50px rgba(0,0,0,0.2); transition: all 0.4s; }
+        .password-input { width: 100%; padding: 1.5rem 2.5rem; font-size: 1.4rem; border: 2px solid rgba(255,255,255,0.4); border-radius: 50px; background: rgba(255,255,255,0.95); text-align: center; margin-bottom: 1rem; font-family: inherit; box-shadow: 0 20px 50px rgba(0,0,0,0.2); transition: all 0.4s; color: #333; position: relative; z-index: 101; pointer-events: auto; }
         .password-input:focus { outline: none; transform: scale(1.05); border-color: #ff6b9d; box-shadow: 0 25px 60px rgba(255,107,157,0.4); }
         .password-correction { width: 100%; height: 8px; background: rgba(255,255,255,0.2); border-radius: 10px; margin: 1.5rem 0; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
         .correction-fill { height: 100%; width: 0; background: linear-gradient(90deg, #ff6b6b, #ff9a9e, #ff6b9d); border-radius: 10px; transition: width 0.3s; }
@@ -397,13 +397,32 @@
         function showLoveLetter() {
             document.getElementById('galleryPage').style.display = 'none';
             document.getElementById('loveLetterPage').style.display = 'block';
-            document.getElementById('letterContent').innerHTML = `
-                <p>My dearest Sreetoma,</p><br>
-                <p>From the moment I saw you, my world changed forever. Your smile is my sunshine, your laugh my favorite song.</p><br>
-                <p>These 60 photos capture just moments, but you... you captured my entire heart. "Until I Found You" plays because that's our story.</p><br>
-                <p>Can't wait for Feb 10th - something magical planned just for you! 🎉</p><br>
-                <p>Forever yours,<br><strong>Abir 💖</strong></p>
-            `;
+            const letterText = `My dearest Sreetoma,\n\nFrom the moment I saw you, my world changed forever. Your smile is my sunshine, your laugh my favorite song.\n\nThese 60 photos capture just moments, but you... you captured my entire heart. "Until I Found You" plays because that's our story.\n\nCan't wait for Feb 10th - something magical planned just for you! 🎉\n\nForever yours,\nAbir 💖`;
+            typewriterEffect(letterText);
+        }
+        
+        function typewriterEffect(text) {
+            const contentDiv = document.getElementById('letterContent');
+            contentDiv.innerHTML = ''; // Clear existing content
+            let index = 0;
+            const speed = 50; // milliseconds per character
+            
+            function typeChar() {
+                if (index < text.length) {
+                    const char = text.charAt(index);
+                    if (char === '\n') {
+                        contentDiv.innerHTML += '<br>';
+                    } else {
+                        contentDiv.innerHTML += char;
+                    }
+                    index++;
+                    // Auto-scroll to bottom as text appears
+                    contentDiv.scrollTop = contentDiv.scrollHeight;
+                    setTimeout(typeChar, speed);
+                }
+            }
+            
+            typeChar();
         }
         function backToGallery() {
             document.getElementById('loveLetterPage').style.display = 'none';
