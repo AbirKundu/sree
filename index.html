@@ -198,6 +198,7 @@
 
     <script>
         const CORRECT_PASSWORD = "2252421098";
+        const TYPEWRITER_SPEED = 50; // milliseconds per character
         const captions = ["Soft but dangerously attractive","Cute enough to steal my eternity","Hot in the most elegant way","This smile owns my universe","Stunning beyond imagination","Wonderfully hypnotic","Elegantly irresistible","Beautifully breathtaking","Perfectly enchanting","Gracefully mesmerizing","Delicately powerful","Sweetly unforgettable","Radiantly gorgeous","Charmingly perfect","Absolutely captivating","Pure perfection","Heart-stealing beauty","Magical presence","Unforgettably stunning","Breathtakingly beautiful","Effortlessly gorgeous","Timeless elegance","Mesmerizing charm","Perfectly imperfect","Soul-captivating","Radiant joy","Pure magic","Unmatched beauty","Heart-melting smile","Eternal sunshine"];
         let secretHeartsFound = 0; let chatInitialized = false;
 
@@ -405,7 +406,6 @@
             const contentDiv = document.getElementById('letterContent');
             contentDiv.innerHTML = ''; // Clear existing content
             let index = 0;
-            const speed = 50; // milliseconds per character
             
             function typeChar() {
                 if (index < text.length) {
@@ -416,9 +416,9 @@
                         contentDiv.innerHTML += char;
                     }
                     index++;
-                    // Auto-scroll to bottom as text appears
+                    // Auto-scroll to show latest text
                     contentDiv.scrollTop = contentDiv.scrollHeight;
-                    setTimeout(typeChar, speed);
+                    setTimeout(typeChar, TYPEWRITER_SPEED);
                 }
             }
             
