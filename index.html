@@ -1,10 +1,8 @@
-<!-- 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>For My Sreetoma ❤️</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;600&family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
@@ -13,353 +11,23 @@
             --hot-pink: #ff0055;
             --dark-bg: #0a0514;
             --glass: rgba(255, 255, 255, 0.08);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body { 
-            background-color: var(--dark-bg); 
-            color: #fff; 
-            font-family: 'Poppins', sans-serif;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
-
-        /* --- STUNNING BACKGROUND --- */
-        #bg-canvas {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; background: radial-gradient(circle at center, #1a0b2e 0%, #0a0514 100%);
-        }
-
-        .floating-heart {
-            position: absolute; color: var(--pink); opacity: 0.3;
-            pointer-events: none; animation: floatUp linear infinite;
-        }
-
-        @keyframes floatUp {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            50% { opacity: 0.5; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
-        }
-
-        /* --- LIVE BIRTHDAY COUNTDOWN --- */
-        .countdown-bar {
-            position: fixed; top: 0; width: 100%; padding: 10px;
-            background: rgba(255, 107, 157, 0.1); backdrop-filter: blur(10px);
-            z-index: 1000; border-bottom: 1px solid rgba(255,255,255,0.1);
-            text-align: center; font-weight: 600; letter-spacing: 1px;
-            color: var(--pink); display: none;
-        }
-
-        /* --- PASSWORD ENTRANCE --- */
-        #entrance {
-            height: 100vh; display: flex; align-items: center; justify-content: center;
-        }
-
-        .pass-card {
-            background: var(--glass); backdrop-filter: blur(20px);
-            padding: 3rem; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1);
-            text-align: center; width: 90%; max-width: 400px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-        }
-
-        .pass-card h1 { font-family: 'Great Vibes', cursive; font-size: 3rem; margin-bottom: 1rem; color: var(--pink); }
-
-        .styled-input {
-            width: 100%; padding: 12px; border-radius: 50px; border: none;
-            background: white; color: #333; text-align: center; font-size: 1.1rem;
-            margin-bottom: 20px; outline: none; box-shadow: 0 5px 15px rgba(255,107,157,0.3);
-        }
-
-        .primary-btn {
-            background: linear-gradient(45deg, var(--pink), var(--hot-pink));
-            color: white; border: none; padding: 12px 40px; border-radius: 50px;
-            cursor: pointer; font-weight: 600; transition: 0.3s;
-            box-shadow: 0 10px 20px rgba(255,0,85,0.3);
-        }
-
-        .primary-btn:hover { transform: scale(1.05); box-shadow: 0 15px 30px rgba(255,0,85,0.5); }
-
-        /* --- PHOTO GALLERY --- */
-        #main-content { display: none; padding-top: 80px; }
-
-        .hero-title {
-            text-align: center; font-family: 'Dancing Script', cursive;
-            font-size: 4.5rem; margin-bottom: 10px;
-            background: linear-gradient(to right, #fff, var(--pink));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-
-        .gallery {
-            column-count: 4; column-gap: 20px; padding: 40px;
-            max-width: 1300px; margin: 0 auto;
-        }
-
-        .photo-card {
-            break-inside: avoid; margin-bottom: 20px; border-radius: 20px;
-            overflow: hidden; position: relative; cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .photo-card img { width: 100%; display: block; filter: grayscale(20%); transition: 0.5s; }
-        
-        .photo-card:hover { transform: scale(1.03) translateY(-10px); }
-        .photo-card:hover img { filter: grayscale(0%); transform: scale(1.1); }
-
-        /* --- ABIR CHATBOT --- */
-        .chat-widget { position: fixed; bottom: 30px; right: 30px; z-index: 2000; }
-
-        .chat-trigger {
-            background: var(--hot-pink); color: white; padding: 15px 25px;
-            border-radius: 50px; cursor: pointer; font-weight: 600;
-            box-shadow: 0 10px 30px rgba(255,0,85,0.4);
-            display: flex; align-items: center; gap: 10px; animation: bounce 2s infinite;
-        }
-
-        .chat-box {
-            width: 350px; height: 500px; background: white; border-radius: 25px;
-            position: absolute; bottom: 80px; right: 0; display: none;
-            flex-direction: column; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-        }
-
-        .chat-header { background: var(--hot-pink); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
-        
-        .chat-body { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; color: #333; }
-        
-        .m-abir { background: #f0f0f0; align-self: flex-start; padding: 10px 15px; border-radius: 15px 15px 15px 2px; font-size: 0.9rem; }
-        .m-user { background: var(--pink); color: white; align-self: flex-end; padding: 10px 15px; border-radius: 15px 15px 2px 15px; font-size: 0.9rem; }
-
-        .chat-options { padding: 10px; display: flex; flex-wrap: wrap; gap: 6px; border-top: 1px solid #eee; }
-        .opt { font-size: 0.75rem; padding: 6px 12px; border-radius: 20px; border: 1px solid var(--pink); color: var(--pink); cursor: pointer; background: #fff; transition: 0.2s; }
-        .opt:hover { background: var(--pink); color: white; }
-
-        /* --- LETTER OVERLAY --- */
-        .letter-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(10, 5, 20, 0.98); z-index: 3000;
-            display: none; align-items: center; justify-content: center;
-        }
-
-        .letter-paper {
-            max-width: 600px; width: 90%; background: #fffaf0; color: #2c3e50;
-            padding: 50px; border-radius: 5px; box-shadow: 0 0 50px rgba(255,107,157,0.3);
-            font-family: 'Playfair Display', serif; font-size: 1.2rem; line-height: 1.8;
-            position: relative;
-        }
-
-        /* --- RESPONSIVE --- */
-        @media (max-width: 768px) { .gallery { column-count: 2; } .chat-box { width: 85vw; right: -20px; } }
-
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-    </style>
-</head>
-<body>
-
-    <div id="bg-canvas"></div>
-    <div class="countdown-bar" id="cBar">Birthday in: --d --h --m --s</div>
-
-    <section id="entrance">
-        <div class="pass-card">
-            <h1>Sreetoma</h1>
-            <p style="margin-bottom: 20px; opacity: 0.8;">A place for our memories only.</p>
-            <input type="password" id="pInput" class="styled-input" placeholder="Enter Access Code">
-            <button class="primary-btn" onclick="startExperience()">Unlock My Heart</button>
-        </div>
-    </section>
-
-    <section id="main-content">
-        <h1 class="hero-title">Sreetoma Mazumdar</h1>
-        <p style="text-align: center; font-style: italic; margin-bottom: 30px;">"You are my favorite kind of magic."</p>
-        
-        <div style="text-align: center; margin-bottom: 40px;">
-            <button class="primary-btn" onclick="toggleLetter(true)">Open My Letter 💌</button>
-        </div>
-
-        <div class="gallery" id="photoGrid"></div>
-    </section>
-
-    <div class="chat-widget" id="chatWidget" style="display: none;">
-        <div class="chat-trigger" onclick="toggleChat()">
-            <span>Wanna talk with Abir? ❤️</span>
-        </div>
-        <div class="chat-box" id="chatBox">
-            <div class="chat-header">
-                <span>Abir 🟢 <small>Active</small></span>
-                <span style="cursor:pointer" onclick="toggleChat()">&times;</span>
-            </div>
-            <div class="chat-body" id="chatBody"></div>
-            <div class="chat-options">
-                <button class="opt" onclick="askAbir('I love you!')">I love you!</button>
-                <button class="opt" onclick="askAbir('How do I look?')">How do I look? ✨</button>
-                <button class="opt" onclick="askAbir('Tell me a secret')">Tell me a secret 🤫</button>
-                <button class="opt" onclick="askAbir('Can you sing for me?')">Sing for me? 🎵</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="letter-overlay" id="letterOverlay">
-        <div class="letter-paper">
-            <div id="typewriter"></div>
-            <button class="primary-btn" style="margin-top: 30px; display: block; width: 100%;" onclick="toggleLetter(false)">Back to Gallery</button>
-        </div>
-    </div>
-
-    <audio id="player" loop><source src="Until I Found you.mp3" type="audio/mpeg"></audio>
-
-    <script>
-        const ACCESS_CODE = "2252421098";
-        
-        // --- Entrance Logic ---
-        function startExperience() {
-            const code = document.getElementById('pInput').value;
-            if(code === ACCESS_CODE) {
-                document.getElementById('entrance').style.display = 'none';
-                document.getElementById('main-content').style.display = 'block';
-                document.getElementById('chatWidget').style.display = 'block';
-                document.getElementById('cBar').style.display = 'block';
-                document.getElementById('player').play();
-                init();
-            } else {
-                alert("Incorrect code, beautiful. Try again!");
-            }
-        }
-
-        // --- Init Features ---
-        function init() {
-            generateHearts();
-            loadPhotos();
-            startTimer();
-        }
-
-        // --- Photo Loader ---
-        function loadPhotos() {
-            const grid = document.getElementById('photoGrid');
-            for(let i=1; i<=60; i++) {
-                grid.innerHTML += `
-                    <div class="photo-card">
-                        <img src="images/${i}.jpg" onerror="this.src='https://via.placeholder.com/400x500/ff6b9d/ffffff?text=Memory+${i}'">
-                    </div>
-                `;
-            }
-        }
-
-        // --- Countdown Timer ---
-        function startTimer() {
-            const target = new Date("February 10, 2026 00:00:00").getTime();
-            setInterval(() => {
-                const now = new Date().getTime();
-                const d = target - now;
-                const days = Math.floor(d / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const mins = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60));
-                const secs = Math.floor((d % (1000 * 60)) / 1000);
-                document.getElementById('cBar').innerHTML = `Birthday in: ${days}d ${hours}h ${mins}m ${secs}s`;
-            }, 1000);
-        }
-
-        // --- Chatbot Logic ---
-        function toggleChat() {
-            const box = document.getElementById('chatBox');
-            box.style.display = (box.style.display === 'flex') ? 'none' : 'flex';
-            if(box.style.display === 'flex' && document.getElementById('chatBody').children.length === 0) {
-                abirSay("Hey Sreetoma! I'm so happy you're here. You look stunning today (I just know it). What's on your mind? ❤️");
-            }
-        }
-
-        function abirSay(text) {
-            const body = document.getElementById('chatBody');
-            const msg = document.createElement('div');
-            msg.className = 'm-abir';
-            msg.innerHTML = `<b>Abir:</b> ${text}`;
-            body.appendChild(msg);
-            body.scrollTop = body.scrollHeight;
-        }
-
-        function askAbir(q) {
-            const body = document.getElementById('chatBody');
-            const userMsg = document.createElement('div');
-            userMsg.className = 'm-user';
-            userMsg.textContent = q;
-            body.appendChild(userMsg);
-
-            let response = "You're so precious to me.";
-            if(q.includes("love")) response = "I love you more than words, more than this code, and definitely more than anyone else! ❤️";
-            if(q.includes("look")) response = "Even if the screen is off, your reflection is the most beautiful thing in this world. ✨";
-            if(q.includes("secret")) response = "My secret? Every time my phone buzzes, I hope it's a message from you. 🤫";
-            if(q.includes("sing")) response = "I'm already playing 'Until I Found You' for you... but I'd hum it in your ear any day. 🎵";
-
-            setTimeout(() => abirSay(response), 800);
-        }
-
-        // --- Typewriter Letter ---
-        const letterContent = `Dear Sreetoma,\n\nI built this world just for you. Every photo in this gallery is a reminder of how lucky I am to know you. You aren't just a person to me; you're my favorite thought, my best memory, and my future.\n\nI hope this little surprise makes your day. You deserve everything beautiful in this world.\n\nHappy Birthday Month, my love.\n\nAlways yours,\nAbir ❤️`;
-
-        function toggleLetter(show) {
-            const overlay = document.getElementById('letterOverlay');
-            overlay.style.display = show ? 'flex' : 'none';
-            if(show) {
-                let i = 0;
-                document.getElementById('typewriter').textContent = "";
-                function type() {
-                    if (i < letterContent.length) {
-                        document.getElementById('typewriter').textContent += letterContent.charAt(i);
-                        i++; setTimeout(type, 50);
-                    }
-                }
-                type();
-            }
-        }
-
-        // --- Visual Extras ---
-        function generateHearts() {
-            const canvas = document.getElementById('bg-canvas');
-            for(let i=0; i<20; i++) {
-                const heart = document.createElement('div');
-                heart.className = 'floating-heart';
-                heart.innerHTML = '❤️';
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.animationDuration = (Math.random() * 10 + 10) + 's';
-                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
-                document.body.appendChild(heart);
-            }
-        }
-    </script>
-</body>
-</html>
-
-
- -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>For My Sreetoma ❤️ - Happy Birthday!</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;600&family=Great+Vibes&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --pink: #ff6b9d;
-            --hot-pink: #ff0055;
-            --dark-bg: #0a0514;
-            --glass: rgba(255, 255, 255, 0.08);
-            --radius: 380px;          /* Carousel radius - desktop base */
-            --item-width: 260px;
-            --item-height: 380px;
-            --duration: 80s;          /* Slower = more elegant */
-            --angle: 18deg;           /* 360 / 20 = 18deg → ~20 visible-ish; adjust for density */
+            --carousel-item-width:  clamp(220px, 65vw, 380px);
+            --carousel-item-height: clamp(330px, 90vw, 570px);
         }
         * { margin:0; padding:0; box-sizing:border-box; }
         body {
             background: var(--dark-bg);
             color: #fff;
             font-family: 'Poppins', sans-serif;
-            min-height: 100vh;
             overflow-x: hidden;
+            height: 100vh;
+            margin: 0;
             touch-action: manipulation;
         }
-        #bg-canvas { 
-            position: fixed; inset:0; z-index:-1; 
+
+        /* Background & Hearts */
+        #bg-canvas {
+            position: fixed; inset: 0; z-index: -2;
             background: radial-gradient(circle at center, #1a0b2e 0%, #0a0514 100%);
         }
         .floating-heart {
@@ -368,199 +36,367 @@
         }
         @keyframes floatUp {
             0% { transform: translateY(100vh) rotate(0deg); opacity:0; }
-            50% { opacity:0.7; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity:0; }
+            50% { opacity: 0.7; }
+            100% { transform: translateY(-20vh) rotate(360deg); opacity:0; }
         }
 
+        /* Countdown bar */
         .countdown-bar {
-            position: fixed; top:0; width:100%; padding:10px;
+            position: fixed; top:0; left:0; right:0; padding: 10px;
             background: rgba(255,107,157,0.12); backdrop-filter: blur(12px);
-            z-index:1000; text-align:center; color:var(--pink); font-weight:600; display:none;
+            z-index: 1000; text-align: center; color: var(--pink);
+            font-weight: 600; display: none; border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
-        #entrance {
-            height:100vh; display:flex; align-items:center; justify-content:center;
+        /* Entrance + Videos */
+        #entrance, #transition-video {
+            position: fixed; inset: 0; z-index: 999;
+            display: flex; align-items: center; justify-content: center;
+            background: #000;
+            transition: opacity 1.2s ease;
         }
+        #entrance.hidden, #transition-video.hidden { opacity: 0; pointer-events: none; }
+
+        video {
+            width: 100%; height: 100%;
+            object-fit: cover;
+        }
+
         .pass-card {
-            background:var(--glass); backdrop-filter:blur(20px);
-            padding:2.5rem; border-radius:28px; border:1px solid rgba(255,255,255,0.12);
-            text-align:center; width:90%; max-width:380px;
-            box-shadow:0 20px 50px rgba(0,0,0,0.6);
+            position: absolute; z-index: 10;
+            background: var(--glass); backdrop-filter: blur(20px);
+            padding: 2.5rem 2rem; border-radius: 28px;
+            border: 1px solid rgba(255,255,255,0.12);
+            text-align: center; width: 90%; max-width: 380px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.7);
         }
-        .pass-card h1 { font-family:'Great Vibes',cursive; font-size:3.2rem; color:var(--pink); margin-bottom:0.8rem; }
+        .pass-card h1 { font-family: 'Great Vibes', cursive; font-size: 3.4rem; color: var(--pink); margin-bottom: 0.8rem; }
         .styled-input {
-            width:100%; padding:12px; border-radius:50px; border:none;
-            background:#fff; color:#222; text-align:center; font-size:1.05rem;
-            margin:1.2rem 0; outline:none;
+            width: 100%; padding: 14px; border-radius: 50px; border: none;
+            background: white; color: #111; font-size: 1.1rem; text-align: center;
+            margin: 1.2rem 0; outline: none;
         }
         .primary-btn {
-            background:linear-gradient(45deg,var(--pink),var(--hot-pink));
-            color:white; border:none; padding:12px 36px; border-radius:50px;
-            cursor:pointer; font-weight:600; transition:all 0.3s;
-            box-shadow:0 8px 20px rgba(255,0,85,0.35);
+            background: linear-gradient(45deg, var(--pink), var(--hot-pink));
+            color: white; border: none; padding: 14px 48px; border-radius: 50px;
+            cursor: pointer; font-weight: 600; font-size: 1.05rem;
+            box-shadow: 0 10px 25px rgba(255,0,85,0.4);
+            transition: all 0.3s;
         }
-        .primary-btn:active { transform:scale(0.96); }
+        .primary-btn:active { transform: scale(0.96); }
 
-        #main-content { display:none; padding:90px 15px 80px; text-align:center; }
+        /* Main content reveal animation */
+        #main-content {
+            display: none;
+            opacity: 0;
+            transform: scale(0.92);
+            transition: all 1.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            padding: 90px 15px 100px;
+            min-height: 100vh;
+            text-align: center;
+        }
+        #main-content.visible {
+            display: block;
+            opacity: 1;
+            transform: scale(1);
+        }
+
         .hero-title {
-            font-family:'Dancing Script',cursive; font-size:clamp(3rem,9vw,5rem);
-            background:linear-gradient(90deg,#fff,var(--pink),#fff);
-            -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-            margin-bottom:0.5rem; animation:glow 4s infinite alternate;
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(3.2rem, 10vw, 5.2rem);
+            background: linear-gradient(90deg, #fff, var(--pink), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.6rem;
+            animation: glow 3s infinite alternate;
         }
-        @keyframes glow { 0%,100% { text-shadow:0 0 15px var(--pink); } 50% { text-shadow:0 0 30px var(--hot-pink); } }
+        @keyframes glow {
+            0%,100% { text-shadow: 0 0 15px var(--pink); }
+            50%     { text-shadow: 0 0 35px var(--hot-pink); }
+        }
 
-        /* ─── PREFERRED 3D CAROUSEL (multiple visible, angled sides) ─── */
-        .scene {
-            perspective: 1200px;
+        /* ─── 3D INFINITE CAROUSEL ─── */
+        .carousel-wrapper {
+            perspective: 1100px;
             width: 100%;
             max-width: 1100px;
             height: 70vh;
-            margin: 50px auto;
+            margin: 40px auto;
             position: relative;
+            overflow: hidden;
+            touch-action: pan-y;
         }
         .carousel {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            transform-style: preserve-3d;
-            animation: spin var(--duration) linear infinite;
-        }
-        .carousel:hover, .carousel:active { animation-play-state: paused; }
-
-        .item {
             position: absolute;
             inset: 0;
-            transform-origin: center;
             transform-style: preserve-3d;
-            backface-visibility: hidden;
+            transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            user-select: none;
         }
-        .item img {
-            width: var(--item-width);
-            height: var(--item-height);
-            object-fit: cover;
-            border-radius: 18px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
-            border: 2px solid rgba(255,107,157,0.25);
-            transition: all 0.6s ease;
+        .carousel-item {
             position: absolute;
+            width: var(--carousel-item-width);
+            height: var(--carousel-item-height);
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+            transition: all 0.5s ease;
+            cursor: grab;
         }
-        .item.active img { transform: translate(-50%, -50%) scale(1.12); box-shadow: 0 25px 60px rgba(255,107,157,0.5); }
-
-        @keyframes spin { to { transform: rotateY(360deg); } }
-
-        /* ─── Responsiveness ─── */
-        @media (max-width: 1024px) {
-            :root { --radius: 300px; --item-width: 220px; --item-height: 330px; --angle: 24deg; }
-            .scene { height: 60vh; }
+        .carousel-item img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            border-radius: 18px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.65);
+            border: 2px solid rgba(255,107,157,0.25);
+            transition: all 0.4s ease;
         }
+        .carousel-item.active img {
+            transform: scale(1.08);
+            box-shadow: 0 30px 70px rgba(255,107,157,0.45);
+            filter: brightness(1.1) saturate(1.15);
+        }
+        .carousel-item.prev, .carousel-item.next {
+            opacity: 0.75;
+            filter: brightness(0.8) saturate(0.85) blur(1px);
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            :root { --radius: 220px; --item-width: 180px; --item-height: 270px; --angle: 30deg; --duration: 65s; }
-            .scene { height: 50vh; margin: 30px auto; }
-            .pass-card { padding: 2rem; }
+            .carousel-wrapper { height: 58vh; margin: 30px auto; }
+            :root { --carousel-item-width: 78vw; --carousel-item-height: 110vw; }
         }
         @media (max-width: 480px) {
-            :root { --radius: 160px; --item-width: 140px; --item-height: 210px; --angle: 40deg; }
-            .hero-title { font-size: 2.6rem; }
+            .hero-title { font-size: 2.9rem; }
+            .pass-card { padding: 2rem 1.5rem; }
         }
 
-        /* Chat, Letter, etc. (kept compact - copy your full styles here if needed) */
-        .chat-widget { position:fixed; bottom:25px; right:25px; z-index:2000; display:none; }
-        /* ... your chat styles ... */
-
-        .letter-overlay { /* your styles */ }
+        /* Chat, Letter (kept minimal - copy your full styles if needed) */
+        .chat-widget { position:fixed; bottom:20px; right:20px; z-index:2000; display:none; }
+        .letter-overlay { /* your original */ }
     </style>
 </head>
 <body>
     <div id="bg-canvas"></div>
-    <div class="countdown-bar" id="cBar">Birthday in: --d --h --m --s</div>
 
+    <!-- Entrance video + password -->
     <section id="entrance">
+        <video id="introVideo" autoplay muted loop playsinline>
+            <source src="mem.mp4" type="video/mp4">
+        </video>
         <div class="pass-card">
             <h1>Sreetoma</h1>
-            <p style="margin:1rem 0; opacity:0.85;">Our little world of memories ✨</p>
-            <input type="password" id="pInput" class="styled-input" placeholder="Our secret code">
-            <button class="primary-btn" onclick="startExperience()">Enter My Heart</button>
+            <p style="margin:1.2rem 0; opacity:0.85;">Our secret place ✨</p>
+            <input type="password" id="pInput" class="styled-input" placeholder="Enter our code">
+            <button class="primary-btn" onclick="checkPassword()">Unlock My Heart</button>
         </div>
     </section>
 
+    <!-- Transition video (hidden initially) -->
+    <div id="transition-video" class="hidden">
+        <video id="btsVideo" autoplay muted playsinline>
+            <source src="bts.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- Countdown -->
+    <div class="countdown-bar" id="cBar">Birthday in: --d --h --m --s</div>
+
+    <!-- Main content -->
     <section id="main-content">
-        <h1 class="hero-title">Happy Birthday, my magic! 🎂❤️</h1>
-        <p style="font-style:italic; margin:1.5rem 0 2.5rem;">You make every moment feel like forever.</p>
+        <h1 class="hero-title">Sreetoma Mazumdar</h1>
+        <p style="font-style:italic; margin:1.5rem 0 2.5rem;">"You are my favorite kind of magic."</p>
 
-        <button class="primary-btn" onclick="toggleLetter(true)" style="margin:1.5rem 0;">Read My Letter 💌</button>
+        <div style="text-align:center; margin:2rem 0;">
+            <button class="primary-btn" onclick="toggleLetter(true)">Open My Letter 💌</button>
+        </div>
 
-        <!-- 3D Carousel - Multiple visible like your dragon example -->
-        <div class="scene">
+        <!-- 3D Carousel -->
+        <div class="carousel-wrapper">
             <div class="carousel" id="carousel"></div>
         </div>
 
-        <p style="margin-top:3rem; opacity:0.9;">Drag / swipe to spin • Watch our moments dance around you 💞</p>
+        <p style="margin-top:3rem; opacity:0.9; font-size:0.95rem;">
+            Swipe left / right to explore our moments 💕
+        </p>
     </section>
 
-    <!-- Your chat widget, letter overlay, audio here (copy from previous) -->
-    <div class="chat-widget" id="chatWidget"> <!-- ... --> </div>
-    <div class="letter-overlay" id="letterOverlay"> <!-- ... --> </div>
-    <audio id="player" loop playsinline><source src="Until I Found you.mp3" type="audio/mpeg"></audio>
+    <!-- Chat widget (your original - add back full styles) -->
+    <div class="chat-widget" id="chatWidget" style="display:none;">
+        <!-- your chat HTML + JS here -->
+    </div>
+
+    <!-- Letter overlay (your original) -->
+    <div class="letter-overlay" id="letterOverlay">
+        <!-- your letter-paper + typewriter -->
+    </div>
+
+    <!-- Background music -->
+    <audio id="player" loop playsinline>
+        <source src="Until.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
         const ACCESS_CODE = "2252421098";
+        let currentIndex = 0;
+        let isDragging = false;
+        let startX = 0;
+        let currentTranslate = 0;
+        let prevTranslate = 0;
         const TOTAL_IMAGES = 60;
 
-        function startExperience() {
-            if (document.getElementById('pInput').value === ACCESS_CODE) {
-                document.getElementById('entrance').style.display = 'none';
-                document.getElementById('main-content').style.display = 'block';
-                document.getElementById('chatWidget').style.display = 'block';
-                document.getElementById('cBar').style.display = 'block';
-                document.getElementById('player').play().catch(() => {});
-                init();
-            } else {
-                alert("Try again, beautiful 💕");
-            }
-        }
+        // Check password
+function checkPassword() {
+    const code = document.getElementById('pInput').value;
+    if (code === ACCESS_CODE) {
+        // Hide entrance (video + card)
+        document.getElementById('entrance').classList.add('hidden');
+
+        // Show transition video
+        const transitionSection = document.getElementById('transition-video');
+        transitionSection.classList.remove('hidden');
+
+        const bts = document.getElementById('btsVideo');
+        
+        bts.onended = function() {
+            // Hide transition video
+            transitionSection.classList.add('hidden');
+
+            // Reveal main content with animation
+            const main = document.getElementById('main-content');
+            main.style.display = 'block';
+            setTimeout(() => main.classList.add('visible'), 100);
+
+            // Show countdown, chat, etc.
+            document.getElementById('cBar').style.display = 'block';
+            document.getElementById('chatWidget').style.display = 'block';
+
+            // Start the romantic background music now
+            const player = document.getElementById('player');
+            player.volume = 0;           // start silent
+            player.play().then(() => {
+                // Fade in volume smoothly (nice touch)
+                let vol = 0;
+                const fadeInterval = setInterval(() => {
+                    vol += 0.05;
+                    if (vol >= 0.4) {        // max volume ~40% to not overpower
+                        player.volume = 0.4;
+                        clearInterval(fadeInterval);
+                    } else {
+                        player.volume = vol;
+                    }
+                }, 150);                     // ~3 second fade-in
+            }).catch(err => {
+                console.log("Music autoplay blocked:", err);
+                // Optional: show small note "Tap anywhere to play music ♫"
+            });
+
+            // Initialize hearts, carousel, timer
+            init();
+        };
+    } else {
+        alert("Wrong code, my love. Try again 💕");
+    }
+}
 
         function init() {
             generateHearts();
             buildCarousel();
             startTimer();
-            // Add your toggleChat, toggleLetter, askAbir functions here...
+            setupCarousel();
         }
 
         function buildCarousel() {
             const container = document.getElementById('carousel');
             let html = '';
             for (let i = 1; i <= TOTAL_IMAGES; i++) {
-                const rot = (i - 1) * parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--angle'));
                 html += `
-                    <div class="item" style="transform: rotateY(${rot}deg) translateZ(var(--radius));">
-                        <img src="images/${i}.jpg" alt="Memory ${i}" 
-                             onerror="this.src='https://via.placeholder.com/400x600/ff6b9d/fff?text=Us+${i}'">
+                    <div class="carousel-item" data-index="${i-1}">
+                        <img src="images/${i}.jpg" alt="Memory ${i}"
+                             onerror="this.src='https://via.placeholder.com/500x750/ff6b9d/ffffff?text=Us+${i}'">
                     </div>
                 `;
             }
             container.innerHTML = html;
+            updateCarousel();
         }
 
-        function generateHearts() {
-            for (let i = 0; i < 25; i++) {
-                const h = document.createElement('div');
-                h.className = 'floating-heart';
-                h.textContent = '❤️';
-                h.style.left = Math.random() * 100 + 'vw';
-                h.style.animationDuration = (Math.random() * 12 + 10) + 's';
-                h.style.fontSize = (Math.random() * 20 + 14) + 'px';
-                document.body.appendChild(h);
-            }
+        function updateCarousel() {
+            const items = document.querySelectorAll('.carousel-item');
+            items.forEach((item, idx) => {
+                const diff = idx - currentIndex;
+                let pos = diff * 100; // percentage based shift
+
+                // Infinite loop logic
+                if (Math.abs(diff) > TOTAL_IMAGES / 2) {
+                    pos += diff > 0 ? -TOTAL_IMAGES * 100 : TOTAL_IMAGES * 100;
+                }
+
+                item.style.transform = `translateX(${pos}%) translateZ(${Math.abs(diff) * -120}px) rotateY(${diff * -12}deg)`;
+                item.classList.remove('active', 'prev', 'next');
+
+                if (diff === 0) item.classList.add('active');
+                if (diff === -1) item.classList.add('prev');
+                if (diff === 1) item.classList.add('next');
+            });
+        }
+
+        function setupCarousel() {
+            const wrapper = document.querySelector('.carousel-wrapper');
+            const carousel = document.getElementById('carousel');
+
+            // Touch / Mouse events
+            const handleStart = (e) => {
+                isDragging = true;
+                startX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+                prevTranslate = currentTranslate;
+                carousel.style.transition = 'none';
+            };
+
+            const handleMove = (e) => {
+                if (!isDragging) return;
+                const currentX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+                const diff = currentX - startX;
+                currentTranslate = prevTranslate + diff * 0.8; // sensitivity
+
+                carousel.style.transform = `translateX(${currentTranslate}px)`;
+            };
+
+            const handleEnd = () => {
+                if (!isDragging) return;
+                isDragging = false;
+                carousel.style.transition = 'transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94)';
+
+                const movedBy = currentTranslate - prevTranslate;
+                if (Math.abs(movedBy) > 60) { // threshold
+                    if (movedBy > 0) currentIndex = (currentIndex - 1 + TOTAL_IMAGES) % TOTAL_IMAGES;
+                    else currentIndex = (currentIndex + 1) % TOTAL_IMAGES;
+                }
+
+                currentTranslate = 0;
+                updateCarousel();
+            };
+
+            wrapper.addEventListener('mousedown', handleStart);
+            wrapper.addEventListener('mousemove', handleMove);
+            wrapper.addEventListener('mouseup', handleEnd);
+            wrapper.addEventListener('mouseleave', handleEnd);
+
+            wrapper.addEventListener('touchstart', handleStart);
+            wrapper.addEventListener('touchmove', handleMove);
+            wrapper.addEventListener('touchend', handleEnd);
         }
 
         function startTimer() {
             const target = new Date("February 10, 2026 00:00:00").getTime();
             setInterval(() => {
                 const dist = target - Date.now();
+                if (dist < 0) {
+                    document.getElementById('cBar').textContent = "It's your birthday month! 🎂❤️";
+                    return;
+                }
                 const d = Math.floor(dist / 86400000);
                 const h = Math.floor((dist % 86400000) / 3600000);
                 const m = Math.floor((dist % 3600000) / 60000);
@@ -569,7 +405,21 @@
             }, 1000);
         }
 
-        // Paste your toggleLetter, abirSay, askAbir, toggleChat here...
+        function generateHearts() {
+            for (let i = 0; i < 28; i++) {
+                const h = document.createElement('div');
+                h.className = 'floating-heart';
+                h.textContent = '❤️';
+                h.style.left = Math.random() * 100 + 'vw';
+                h.style.animationDuration = (Math.random() * 14 + 9) + 's';
+                h.style.fontSize = (Math.random() * 24 + 16) + 'px';
+                h.style.animationDelay = Math.random() * 6 + 's';
+                document.body.appendChild(h);
+            }
+        }
+
+        // Your other functions: toggleLetter, toggleChat, abirSay, askAbir, typewriter...
+        // Paste them here from your original code
     </script>
 </body>
 </html>
