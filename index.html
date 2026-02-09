@@ -11,7 +11,7 @@
             --hot-pink: #ff0055;
             --dark-bg: #0a0514;
             --glass: rgba(255, 255, 255, 0.08);
-            --carousel-item-width:  clamp(220px, 65vw, 380px);
+            --carousel-item-width: clamp(220px, 65vw, 380px);
             --carousel-item-height: clamp(330px, 90vw, 570px);
         }
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -112,10 +112,10 @@
         }
         @keyframes glow {
             0%,100% { text-shadow: 0 0 15px var(--pink); }
-            50%     { text-shadow: 0 0 35px var(--hot-pink); }
+            50% { text-shadow: 0 0 35px var(--hot-pink); }
         }
 
-        /* ─── 3D INFINITE CAROUSEL ─── */
+        /* 3D Infinite Carousel */
         .carousel-wrapper {
             perspective: 1100px;
             width: 100%;
@@ -172,19 +172,16 @@
             .hero-title { font-size: 2.9rem; }
             .pass-card { padding: 2rem 1.5rem; }
         }
-
-        /* Chat, Letter (kept minimal - copy your full styles if needed) */
-        .chat-widget { position:fixed; bottom:20px; right:20px; z-index:2000; display:none; }
-        .letter-overlay { /* your original */ }
     </style>
 </head>
 <body>
     <div id="bg-canvas"></div>
 
-    <!-- Entrance video + password -->
+    <!-- Entrance screen with intro video -->
     <section id="entrance">
-        <video id="introVideo" autoplay muted loop playsinline>
+        <video id="introVideo" autoplay muted loop playsinline preload="metadata">
             <source src="mem.mp4" type="video/mp4">
+            Your browser does not support the video tag.
         </video>
         <div class="pass-card">
             <h1>Sreetoma</h1>
@@ -194,14 +191,15 @@
         </div>
     </section>
 
-    <!-- Transition video (hidden initially) -->
+    <!-- Transition video -->
     <div id="transition-video" class="hidden">
-        <video id="btsVideo" autoplay muted playsinline>
+        <video id="btsVideo" autoplay muted playsinline preload="metadata">
             <source src="bts.mp4" type="video/mp4">
+            Your browser does not support the video tag.
         </video>
     </div>
 
-    <!-- Countdown -->
+    <!-- Countdown bar -->
     <div class="countdown-bar" id="cBar">Birthday in: --d --h --m --s</div>
 
     <!-- Main content -->
@@ -223,17 +221,17 @@
         </p>
     </section>
 
-    <!-- Chat widget (your original - add back full styles) -->
+    <!-- Chat widget placeholder (add your full chat HTML + JS here) -->
     <div class="chat-widget" id="chatWidget" style="display:none;">
-        <!-- your chat HTML + JS here -->
+        <!-- Paste your original chat HTML here -->
     </div>
 
-    <!-- Letter overlay (your original) -->
+    <!-- Letter overlay placeholder (add your full letter HTML + JS here) -->
     <div class="letter-overlay" id="letterOverlay">
-        <!-- your letter-paper + typewriter -->
+        <!-- Paste your original letter-paper + typewriter here -->
     </div>
 
-    <!-- Background music -->
+    <!-- Background music - starts after bts.mp4 ends -->
     <audio id="player" loop playsinline>
         <source src="Until.mp3" type="audio/mpeg">
     </audio>
@@ -247,59 +245,50 @@
         let prevTranslate = 0;
         const TOTAL_IMAGES = 60;
 
-        // Check password
-function checkPassword() {
-    const code = document.getElementById('pInput').value;
-    if (code === ACCESS_CODE) {
-        // Hide entrance (video + card)
-        document.getElementById('entrance').classList.add('hidden');
+        // Password check & sequence
+        function checkPassword() {
+            const code = document.getElementById('pInput').value;
+            if (code === ACCESS_CODE) {
+                document.getElementById('entrance').classList.add('hidden');
 
-        // Show transition video
-        const transitionSection = document.getElementById('transition-video');
-        transitionSection.classList.remove('hidden');
+                const transition = document.getElementById('transition-video');
+                transition.classList.remove('hidden');
 
-        const bts = document.getElementById('btsVideo');
-        
-        bts.onended = function() {
-            // Hide transition video
-            transitionSection.classList.add('hidden');
+                const bts = document.getElementById('btsVideo');
+                bts.onended = function() {
+                    transition.classList.add('hidden');
 
-            // Reveal main content with animation
-            const main = document.getElementById('main-content');
-            main.style.display = 'block';
-            setTimeout(() => main.classList.add('visible'), 100);
+                    const main = document.getElementById('main-content');
+                    main.style.display = 'block';
+                    setTimeout(() => main.classList.add('visible'), 100);
 
-            // Show countdown, chat, etc.
-            document.getElementById('cBar').style.display = 'block';
-            document.getElementById('chatWidget').style.display = 'block';
+                    document.getElementById('cBar').style.display = 'block';
+                    document.getElementById('chatWidget').style.display = 'block';
 
-            // Start the romantic background music now
-            const player = document.getElementById('player');
-            player.volume = 0;           // start silent
-            player.play().then(() => {
-                // Fade in volume smoothly (nice touch)
-                let vol = 0;
-                const fadeInterval = setInterval(() => {
-                    vol += 0.05;
-                    if (vol >= 0.4) {        // max volume ~40% to not overpower
-                        player.volume = 0.4;
-                        clearInterval(fadeInterval);
-                    } else {
-                        player.volume = vol;
-                    }
-                }, 150);                     // ~3 second fade-in
-            }).catch(err => {
-                console.log("Music autoplay blocked:", err);
-                // Optional: show small note "Tap anywhere to play music ♫"
-            });
+                    // Start music with fade-in
+                    const player = document.getElementById('player');
+                    player.volume = 0;
+                    player.play().then(() => {
+                        let vol = 0;
+                        const fade = setInterval(() => {
+                            vol += 0.05;
+                            if (vol >= 0.4) {
+                                player.volume = 0.4;
+                                clearInterval(fade);
+                            } else {
+                                player.volume = vol;
+                            }
+                        }, 150);
+                    }).catch(err => {
+                        console.log("Music play failed:", err);
+                    });
 
-            // Initialize hearts, carousel, timer
-            init();
-        };
-    } else {
-        alert("Wrong code, my love. Try again 💕");
-    }
-}
+                    init();
+                };
+            } else {
+                alert("Wrong code, my love. Try again 💕");
+            }
+        }
 
         function init() {
             generateHearts();
@@ -327,16 +316,14 @@ function checkPassword() {
             const items = document.querySelectorAll('.carousel-item');
             items.forEach((item, idx) => {
                 const diff = idx - currentIndex;
-                let pos = diff * 100; // percentage based shift
+                let pos = diff * 100;
 
-                // Infinite loop logic
                 if (Math.abs(diff) > TOTAL_IMAGES / 2) {
                     pos += diff > 0 ? -TOTAL_IMAGES * 100 : TOTAL_IMAGES * 100;
                 }
 
                 item.style.transform = `translateX(${pos}%) translateZ(${Math.abs(diff) * -120}px) rotateY(${diff * -12}deg)`;
                 item.classList.remove('active', 'prev', 'next');
-
                 if (diff === 0) item.classList.add('active');
                 if (diff === -1) item.classList.add('prev');
                 if (diff === 1) item.classList.add('next');
@@ -347,7 +334,6 @@ function checkPassword() {
             const wrapper = document.querySelector('.carousel-wrapper');
             const carousel = document.getElementById('carousel');
 
-            // Touch / Mouse events
             const handleStart = (e) => {
                 isDragging = true;
                 startX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
@@ -359,8 +345,7 @@ function checkPassword() {
                 if (!isDragging) return;
                 const currentX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
                 const diff = currentX - startX;
-                currentTranslate = prevTranslate + diff * 0.8; // sensitivity
-
+                currentTranslate = prevTranslate + diff * 0.8;
                 carousel.style.transform = `translateX(${currentTranslate}px)`;
             };
 
@@ -370,7 +355,7 @@ function checkPassword() {
                 carousel.style.transition = 'transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94)';
 
                 const movedBy = currentTranslate - prevTranslate;
-                if (Math.abs(movedBy) > 60) { // threshold
+                if (Math.abs(movedBy) > 60) {
                     if (movedBy > 0) currentIndex = (currentIndex - 1 + TOTAL_IMAGES) % TOTAL_IMAGES;
                     else currentIndex = (currentIndex + 1) % TOTAL_IMAGES;
                 }
@@ -418,8 +403,12 @@ function checkPassword() {
             }
         }
 
-        // Your other functions: toggleLetter, toggleChat, abirSay, askAbir, typewriter...
-        // Paste them here from your original code
+        // Add your toggleLetter, toggleChat, abirSay, askAbir, typewriter code here
+        // For example:
+        function toggleLetter(show) {
+            // your letter logic
+        }
+        // etc.
     </script>
 </body>
 </html>
