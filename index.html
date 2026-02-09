@@ -143,27 +143,19 @@
         }
 
         /* FIXED CAROUSEL - PERFECT CENTERING */
-        .carousel-wrapper {
-            width: 100%; 
-            height: 65vh; 
-            margin: 40px auto;
-            position: relative; 
-            overflow: hidden; 
-            border-radius: 28px;
-            background: rgba(255,107,157,0.08); 
-            backdrop-filter: blur(20px);
-            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .carousel {
-            display: flex; 
-            height: 100%; 
-            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            width: max-content;
-        }
+       .carousel {
+    display: flex; 
+    height: 100%; 
+    width: max-content;
+    will-change: transform;
+    backface-visibility: hidden;
+    transform: translateZ(0); /* Force GPU */
+}
+.carousel-wrapper {
+    overscroll-behavior: contain;
+    touch-action: pan-y; /* Allow vertical scroll outside */
+}
+
         .carousel-item {
             flex: 0 0 85vw; 
             height: 100%; 
@@ -469,69 +461,91 @@
             updateCarousel();
         }
 
-        function updateCarousel() {
-            const carousel = document.getElementById('carousel');
-            const items = document.querySelectorAll('.carousel-item');
-            
-            items.forEach(item => item.classList.remove('active'));
-            items[currentIndex].classList.add('active');
-            
-            // FIXED PERFECT CENTERING
-            const translateX = -(currentIndex * 85);
-            carousel.style.transform = `translateX(${translateX}vw)`;
-        }
+     function updateCarousel() {
+    const items = document.querySelectorAll('.carousel-item');
+    items.forEach(item => item.classList.remove('active'));
+    items[currentIndex].classList.add('active');
+    smoothSnapToCenter(); // Use smooth snap
+}
+
 
         function setupCarousel() {
-            const wrapper = document.querySelector('.carousel-wrapper');
-            let startX = 0;
-            let currentX = 0;
-            let isDragging = false;
+    const wrapper = document.querySelector('.carousel-wrapper');
+    const carousel = document.getElementById('carousel');
+    let startX = 0;
+    let currentX = 0;
+    let isDragging = false;
+    let dragOffset = 0;
 
-            wrapper.addEventListener('touchstart', e => {
-                isDragging = true;
-                startX = e.touches[0].clientX;
-            }, { passive: true });
+    wrapper.addEventListener('touchstart', e => {
+        isDragging = true;
+        startX = e.touches[0].clientX;
+        dragOffset = 0;
+        carousel.style.transition = 'none'; // Disable snap during drag
+    }, { passive: true });
 
-            wrapper.addEventListener('touchmove', e => {
-                if (!isDragging) return;
-                e.preventDefault();
-                currentX = e.touches[0].clientX;
-            }, { passive: false });
+    wrapper.addEventListener('touchmove', e => {
+        if (!isDragging) return;
+        e.preventDefault();
+        currentX = e.touches[0].clientX;
+        dragOffset = (startX - currentX) * 0.8; // Smooth drag feel
+        const offsetX = -(currentIndex * 85) + dragOffset;
+        carousel.style.transform = `translateX(${offsetX}vw)`;
+    }, { passive: false });
 
-            wrapper.addEventListener('touchend', () => {
-                if (!isDragging) return;
-                isDragging = false;
-                
-                const diff = startX - currentX;
-                if (Math.abs(diff) > 50) {
-                    if (diff > 0) nextImage();
-                    else prevImage();
-                }
-                startX = 0;
-                currentX = 0;
-            });
-
-            wrapper.addEventListener('mousedown', e => {
-                isDragging = true;
-                startX = e.clientX;
-            });
-            wrapper.addEventListener('mousemove', e => {
-                if (!isDragging) return;
-                currentX = e.clientX;
-            });
-            wrapper.addEventListener('mouseup', () => {
-                if (!isDragging) return;
-                isDragging = false;
-                
-                const diff = startX - currentX;
-                if (Math.abs(diff) > 50) {
-                    if (diff > 0) nextImage();
-                    else prevImage();
-                }
-                startX = 0;
-                currentX = 0;
-            });
+    wrapper.addEventListener('touchend', () => {
+        if (!isDragging) return;
+        isDragging = false;
+        
+        // PERFECT SNAP LOGIC
+        const threshold = 40; // Drag distance to swipe
+        if (Math.abs(dragOffset) > threshold) {
+            currentIndex = dragOffset > 0 ? 
+                (currentIndex + 1) % TOTAL_IMAGES : 
+                (currentIndex - 1 + TOTAL_IMAGES) % TOTAL_IMAGES;
         }
+        
+        smoothSnapToCenter();
+    });
+
+    // Mouse support
+    ['mousedown', 'mousemove', 'mouseup'].forEach(event => {
+        wrapper.addEventListener(event, handleMouse, { passive: false });
+    });
+
+    function handleMouse(e) {
+        if (e.type === 'mousedown') {
+            isDragging = true;
+            startX = e.clientX;
+            dragOffset = 0;
+            carousel.style.transition = 'none';
+        } else if (e.type === 'mousemove' && isDragging) {
+            e.preventDefault();
+            currentX = e.clientX;
+            dragOffset = (startX - currentX) * 0.8;
+            const offsetX = -(currentIndex * 85) + dragOffset;
+            carousel.style.transform = `translateX(${offsetX}vw)`;
+        } else if (e.type === 'mouseup' && isDragging) {
+            isDragging = false;
+            const threshold = 40;
+            if (Math.abs(dragOffset) > threshold) {
+                currentIndex = dragOffset > 0 ? 
+                    (currentIndex + 1) % TOTAL_IMAGES : 
+                    (currentIndex - 1 + TOTAL_IMAGES) % TOTAL_IMAGES;
+            }
+            smoothSnapToCenter();
+        }
+    }
+}
+
+function smoothSnapToCenter() {
+    const carousel = document.getElementById('carousel');
+    carousel.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+    const translateX = -(currentIndex * 85);
+    carousel.style.transform = `translateX(${translateX}vw)`;
+}
+
+
 
         function nextImage() {
             currentIndex = (currentIndex + 1) % TOTAL_IMAGES;
