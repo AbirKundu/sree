@@ -9,7 +9,7 @@
     <style>
         :root {
             --pink: #ff6b9d;
-            --hot-pink: #ff0055;
+            --hot-pink: #ff0055;  
             --dark-bg: #0a0514;
             --glass: rgba(255, 255, 255, 0.08);
         }
@@ -467,29 +467,48 @@
 }
 
 
-
-    function setupCarousel() {
+function setupCarousel() {
     const wrapper = document.querySelector('.carousel-wrapper');
+    const carouselItems = document.querySelectorAll('.carousel-item'); // TAP ON IMAGES!
     const carousel = document.getElementById('carousel');
     let startX = 0;
     let isDragging = false;
     let dragOffset = 0;
 
+    // TAP ON IMAGES - LEFT SIDE = PREV, RIGHT SIDE = NEXT
+    carouselItems.forEach((item, index) => {
+        item.addEventListener('click', (e) => {
+            const rect = item.getBoundingClientRect();
+            const clickX = e.clientX || e.touches[0].clientX;
+            const centerX = rect.left + rect.width / 2;
+            
+            if (clickX < centerX) {
+                // LEFT SIDE - PREVIOUS
+                currentIndex = (currentIndex - 1 + TOTAL_IMAGES) % TOTAL_IMAGES;
+            } else {
+                // RIGHT SIDE - NEXT
+                currentIndex = (currentIndex + 1) % TOTAL_IMAGES;
+            }
+            snapToCenter();
+        });
+        
+        // Prevent image click bubbling
+        item.querySelector('img').addEventListener('click', (e) => e.stopPropagation());
+    });
+
+    // EXISTING SWIPE (wrapper)
     wrapper.addEventListener('touchstart', e => {
         isDragging = true;
         startX = e.touches[0].clientX;
         dragOffset = 0;
-        carousel.style.transition = 'none'; // Instant drag response
+        carousel.style.transition = 'none';
     }, { passive: true });
 
     wrapper.addEventListener('touchmove', e => {
         if (!isDragging) return;
         e.preventDefault();
-        
         const currentX = e.touches[0].clientX;
-        dragOffset = startX - currentX; // 1:1 NATURAL movement
-        
-        // Apply drag offset to current position
+        dragOffset = startX - currentX;
         const offsetX = -(currentIndex * 85) + dragOffset;
         carousel.style.transform = `translateX(${offsetX}vw)`;
     }, { passive: false });
@@ -497,18 +516,15 @@
     wrapper.addEventListener('touchend', () => {
         if (!isDragging) return;
         isDragging = false;
-        
-        // NATURAL THRESHOLD - swipe if dragged > 1/3 screen width
         const threshold = window.innerWidth * 0.15;
         if (Math.abs(dragOffset) > threshold) {
             currentIndex += dragOffset > 0 ? 1 : -1;
             currentIndex = (currentIndex + TOTAL_IMAGES) % TOTAL_IMAGES;
         }
-        
-        snapToCenter(); // Clean snap back
+        snapToCenter();
     });
 
-    // Mouse support (identical logic)
+    // Mouse support
     wrapper.addEventListener('mousedown', e => {
         isDragging = true;
         startX = e.clientX;
@@ -534,13 +550,6 @@
         }
         snapToCenter();
     });
-}
-
-function snapToCenter() {
-    const carousel = document.getElementById('carousel');
-    carousel.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)'; // Natural iOS curve
-    const translateX = -(currentIndex * 85);
-    carousel.style.transform = `translateX(${translateX}vw)`;
 }
 
 
@@ -622,5 +631,6 @@ Abir 💍🤍`;
     </script>
 </body>
 </html>
+
 
 
