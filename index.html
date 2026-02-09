@@ -45,36 +45,51 @@
             font-weight: 600; display: none; border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* Entrance + Videos */
-        #entrance video, #transition-video video {
-    width: 100%;
-    height: 100%;
-    object-fit: contain !important;  /* KEY FIX - no cropping */
-    object-position: center center;
-    max-width: 100vw;
-    max-height: 100vh;
-}
-#entrance, #transition-video {
-    position: fixed; inset: 0; z-index: 999;
-    display: flex; align-items: center; justify-content: center;
-    background: #000;
-    width: 100vw;
-    height: 100vh;
-}
+        /* FIXED ENTRANCE - 50/50 VIDEO + PASS CARD */
+        #entrance {
+            position: fixed; inset: 0; z-index: 999;
+            display: flex; flex-direction: column;
+            background: #000;
+            height: 100vh;
+            overflow: hidden;
+        }
+        #entrance.hidden { display: none !important; }
+        
+        #introVideo {
+            flex: 1; /* Exactly 50% top */
+            width: 100%;
+            height: 50vh;
+            object-fit: contain !important;
+            object-position: center;
+        }
 
-        #entrance.hidden, #transition-video.hidden { opacity: 0; pointer-events: none; }
-
-        video { width: 100%; height: 100%; object-fit: cover; }
+        .pass-card-container {
+            flex: 1; /* Exactly 50% bottom */
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
+        }
 
         .pass-card {
-            position: absolute; z-index: 10;
-            background: var(--glass); backdrop-filter: blur(20px);
-            padding: 2.5rem 2rem; border-radius: 28px;
+            background: var(--glass); 
+            backdrop-filter: blur(20px);
+            padding: 2.5rem 2rem; 
+            border-radius: 28px;
             border: 1px solid rgba(255,255,255,0.12);
-            text-align: center; width: 90%; max-width: 380px;
+            text-align: center; 
+            width: 90%; 
+            max-width: 380px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.7);
         }
-        .pass-card h1 { font-family: 'Great Vibes', cursive; font-size: 3.4rem; color: var(--pink); margin-bottom: 0.8rem; }
+        .pass-card h1 { 
+            font-family: 'Great Vibes', cursive; 
+            font-size: clamp(2.5rem, 8vw, 3.4rem); 
+            color: var(--pink); 
+            margin-bottom: 0.8rem; 
+        }
         .styled-input {
             width: 100%; padding: 14px; border-radius: 50px; border: none;
             background: white; color: #111; font-size: 1.1rem; text-align: center;
@@ -88,6 +103,21 @@
             transition: all 0.3s;
         }
         .primary-btn:active { transform: scale(0.96); }
+
+        /* Transition Video */
+        #transition-video {
+            position: fixed; inset: 0; z-index: 999;
+            width: 100vw; height: 100vh;
+            display: none;
+            align-items: center; justify-content: center;
+            background: #000;
+        }
+        #transition-video.hidden { display: none !important; }
+        #btsVideo {
+            width: 100vw; height: 100vh;
+            object-fit: contain !important;
+            object-position: center;
+        }
 
         #main-content {
             display: none; opacity: 0; transform: scale(0.92);
@@ -108,96 +138,91 @@
             50% { text-shadow: 0 0 35px var(--hot-pink); } 
         }
 
-        /* FLAT HORIZONTAL SWIPE GALLERY - PERFECT PHONE CENTERING */
+        /* FIXED CAROUSEL - PERFECT CENTERING */
         .carousel-wrapper {
-    width: 100%; 
-    height: 65vh; 
-    margin: 40px auto;
-    position: relative; 
-    overflow: hidden; 
-    border-radius: 28px;
-    background: rgba(255,107,157,0.08); 
-    backdrop-filter: blur(20px);
-    box-shadow: 0 25px 60px rgba(0,0,0,0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
-
-.carousel {
-    display: flex; 
-    height: 100%; 
-    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    width: max-content;  /* FIXED - allows full width */
-}
-
-.carousel-item {
-    flex: 0 0 85vw; 
-    height: 100%; 
-    display: flex; 
-    flex-direction: column;
-    align-items: center;  /* CENTER IMAGES */
-    justify-content: center; 
-    padding: 20px 10px;  /* REDUCED SIDES */
-}
-
-.photo-frame {
-    flex: 1; 
-    width: 100%; 
-    max-width: 300px;  /* SMALLER MAX */
-    max-height: 100%;
-    position: relative;
-    background: linear-gradient(145deg, rgba(255,255,255,0.15), rgba(255,107,157,0.12));
-    border-radius: 24px; 
-    overflow: hidden; 
-    border: 3px solid rgba(255,107,157,0.4);
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;  /* CENTER IMAGE INSIDE FRAME */
-}
-
-.carousel-item img {
-    max-width: 95%; 
-    max-height: 95%; 
-    width: auto; 
-    height: auto; 
-    object-fit: contain; 
-    border-radius: 20px;
-    transition: all 0.4s ease;
-}
-
-.carousel-item .caption {
-    margin-top: 12px; 
-    background: linear-gradient(145deg, rgba(0,0,0,0.8), rgba(255,107,157,0.2));
-    color: #fff; 
-    padding: 12px 15px; 
-    border-radius: 20px; 
-    max-width: 95%;  /* PREVENTS OVERFLOW */
-    font-family: 'Playfair Display', serif; 
-    font-size: clamp(0.8rem, 2.8vw, 1rem);  /* SMALLER FONT */
-    font-style: italic; 
-    text-align: center; 
-    font-weight: 400;
-    overflow: hidden;
-    text-overflow: ellipsis;  /* CUTS LONG TEXT CLEANLY */
-    word-break: break-word;   /* BREAKS LONG WORDS */
-    border: 1px solid rgba(255,255,255,0.3); 
-    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-    line-height: 1.3;
-}
-
-        .carousel-item.active {
-            .photo-frame {
-                box-shadow: 0 35px 80px rgba(255,107,157,0.5), inset 0 1px 0 rgba(255,255,255,0.5);
-                border-color: rgba(255,107,157,0.7);
-            }
-            img { filter: brightness(1.2) saturate(1.3); transform: scale(1.02); }
-            .caption {
-                background: linear-gradient(145deg, rgba(255,107,157,0.3), rgba(255,0,85,0.2));
-                box-shadow: 0 12px 30px rgba(255,107,157,0.5);
-            }
+            width: 100%; 
+            height: 65vh; 
+            margin: 40px auto;
+            position: relative; 
+            overflow: hidden; 
+            border-radius: 28px;
+            background: rgba(255,107,157,0.08); 
+            backdrop-filter: blur(20px);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .carousel {
+            display: flex; 
+            height: 100%; 
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            width: max-content;
+        }
+        .carousel-item {
+            flex: 0 0 85vw; 
+            height: 100%; 
+            display: flex; 
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; 
+            padding: 20px 10px;
+        }
+        .photo-frame {
+            flex: 1; 
+            width: 100%; 
+            max-width: 300px;
+            max-height: 100%;
+            position: relative;
+            background: linear-gradient(145deg, rgba(255,255,255,0.15), rgba(255,107,157,0.12));
+            border-radius: 24px; 
+            overflow: hidden; 
+            border: 3px solid rgba(255,107,157,0.4);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .carousel-item img {
+            max-width: 95%; 
+            max-height: 95%; 
+            width: auto; 
+            height: auto; 
+            object-fit: contain; 
+            border-radius: 20px;
+            transition: all 0.4s ease;
+        }
+        .carousel-item .caption {
+            margin-top: 12px; 
+            background: linear-gradient(145deg, rgba(0,0,0,0.8), rgba(255,107,157,0.2));
+            color: #fff; 
+            padding: 12px 15px; 
+            border-radius: 20px; 
+            max-width: 95%;
+            font-family: 'Playfair Display', serif; 
+            font-size: clamp(0.8rem, 2.8vw, 1rem);
+            font-style: italic; 
+            text-align: center; 
+            font-weight: 400;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: break-word;
+            border: 1px solid rgba(255,255,255,0.3); 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            line-height: 1.3;
+        }
+        .carousel-item.active .photo-frame {
+            box-shadow: 0 35px 80px rgba(255,107,157,0.5), inset 0 1px 0 rgba(255,255,255,0.5);
+            border-color: rgba(255,107,157,0.7);
+        }
+        .carousel-item.active img { 
+            filter: brightness(1.2) saturate(1.3); 
+            transform: scale(1.02); 
+        }
+        .carousel-item.active .caption {
+            background: linear-gradient(145deg, rgba(255,107,157,0.3), rgba(255,0,85,0.2));
+            box-shadow: 0 12px 30px rgba(255,107,157,0.5);
         }
 
         /* Letter Modal */
@@ -207,36 +232,30 @@
             align-items: center; justify-content: center;
         }
         .letter-overlay.active { display: flex; }
-        .typewriter-text {
-    font-family: 'Great Vibes', cursive;
-    font-size: clamp(1.4rem, 4vw, 1.8rem);
-    line-height: 1.6;
-    color: #ff2663;
-    text-align: center;
-    border-right: 3px solid #ff6b9d;
-    white-space: pre-wrap;
-    overflow: hidden;
-    animation: typing 4s steps(40, end), blink-caret 0.75s step-end infinite;
-}
-
-@keyframes typing {
-    from { width: 0; }
-    to { width: 100%; }
-}
-
-@keyframes blink-caret {
-    from, to { border-color: transparent; }
-    50% { border-color: #ff6b9d; }
-}
-
-        .letter-content {
-            font-family: 'Great Vibes', cursive; font-size: clamp(1.4rem, 4vw, 1.8rem);
-            line-height: 1.6; color: #da1c52; text-align: center;
-            animation: fadeInUp 1s ease;
+        .letter-paper {
+            background: linear-gradient(145deg, #f9e4e4, #f0d0d0);
+            width: 90%; max-width: 600px; height: 80vh; border-radius: 25px;
+            padding: 3rem; box-shadow: 0 30px 100px rgba(255,107,157,0.3);
+            position: relative; overflow-y: auto; border: 3px solid rgba(255,107,157,0.3);
         }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+        .typewriter-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(1.4rem, 4vw, 1.8rem);
+            line-height: 1.6;
+            color: #ff2663;
+            text-align: center;
+            border-right: 3px solid #ff6b9d;
+            white-space: pre-wrap;
+            overflow: hidden;
+            animation: typing 4s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #ff6b9d; }
         }
         .close-letter {
             position: absolute; top: 20px; right: 25px; background: none;
@@ -246,16 +265,14 @@
         }
         .close-letter:hover { background: rgba(255,107,157,0.2); transform: scale(1.1); }
 
-        /* Mobile Perfect */
         @media (max-width: 480px) {
-    .carousel-item { flex: 0 0 92vw; padding: 10px 5px; }
-    .carousel-item .caption { 
-        max-width: 92vw; 
-        font-size: clamp(0.75rem, 2.5vw, 0.95rem);
-        padding: 10px 12px;
-    }
-}
-
+            .carousel-item { flex: 0 0 92vw; padding: 10px 5px; }
+            .carousel-item .caption { 
+                max-width: 92vw; 
+                font-size: clamp(0.75rem, 2.5vw, 0.95rem);
+                padding: 10px 12px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -270,16 +287,18 @@
 
     <div id="bg-canvas"></div>
 
-    <!-- Entrance -->
+    <!-- FIXED Entrance - 50/50 Split -->
     <section id="entrance">
         <video id="introVideo" autoplay muted loop playsinline preload="metadata">
             <source src="mem.mp4" type="video/mp4">
         </video>
-        <div class="pass-card">
-            <h1>Sreetoma</h1>
-            <p style="margin:1.2rem 0; opacity:0.85;"> Can You Unlock The Heart ✨</p>
-            <input type="password" id="pInput" class="styled-input" placeholder="Enter our code">
-            <button class="primary-btn" onclick="checkPassword()">Unlock Abir's Heart</button>
+        <div class="pass-card-container">
+            <div class="pass-card">
+                <h1>Sreetoma</h1>
+                <p style="margin:1.2rem 0; opacity:0.85;">Our secret place ✨</p>
+                <input type="password" id="pInput" class="styled-input" placeholder="Enter our code">
+                <button class="primary-btn" onclick="checkPassword()">Unlock My Heart</button>
+            </div>
         </div>
     </section>
 
@@ -309,26 +328,24 @@
 
     <!-- Letter Modal -->
     <div class="letter-overlay" id="letterOverlay">
-       <div class="letter-paper">
-    <button class="close-letter" onclick="toggleLetter(false)">×</button>
-    <div class="typewriter-text" id="typewriter">
-        My dearest Sreetoma, 💕
+        <div class="letter-paper">
+            <button class="close-letter" onclick="toggleLetter(false)">×</button>
+            <div class="typewriter-text" id="typewriter">
+                My dearest Sreetoma, 💕
 
-        Every moment with you feels like a dream I never want to wake from. ✨
-        Your smile lights up my darkest days 🌸, your laugh is my favorite melody 🎶, 
-        and your love is the home I've always been searching for. 🏡❤️
+                Every moment with you feels like a dream I never want to wake from. ✨
+                Your smile lights up my darkest days 🌸, your laugh is my favorite melody 🎶, 
+                and your love is the home I've always been searching for. 🏡❤️
 
-        You are my forever ♾️, my always, my everything. 
-        Happy birthday month, my love! 🎂💖 Here's to countless more memories together. 🌟
+                You are my forever ♾️, my always, my everything. 
+                Happy birthday month, my love! 🎂💖 Here's to countless more memories together. 🌟
 
-        Forever yours,
-        Abir 💍🤍
+                Forever yours,
+                Abir 💍🤍
+            </div>
+        </div>
     </div>
-</div>
 
-    </div>
-
-    <!-- FIXED AUDIO - AUTOPLAY ENABLED -->
     <audio id="player" loop preload="auto">
         <source src="Until.mp3" type="audio/mpeg">
     </audio>
@@ -381,7 +398,10 @@
 
         function checkPassword() {
             const code = document.getElementById('pInput').value;
-            if (code !== ACCESS_CODE) { alert("Wrong code, my love 💕 It is 2252421098. Abir really got Upset about you 🥹 No No, sorry. Abir can't upset on you my Baby Girl, Ummah 😘🫦"); return; }
+            if (code !== ACCESS_CODE) { 
+                alert("Wrong code, my love 💕 It is 2252421098. Abir really got Upset about you 🥹 No No, sorry. Abir can't upset on you my Baby Girl, Ummah 😘🫦"); 
+                return; 
+            }
 
             const intro = document.getElementById('introVideo');
             const transition = document.getElementById('transition-video');
@@ -400,11 +420,9 @@
                 setTimeout(() => main.classList.add('visible'), 100);
                 document.getElementById('cBar').style.display = 'block';
 
-                // FIXED MUSIC - Multiple attempts + user gesture
                 const player = document.getElementById('player');
                 player.volume = 0.4;
                 player.play().then(() => {}).catch(() => {
-                    // Retry after user interaction
                     document.addEventListener('click', () => player.play(), { once: true });
                     document.addEventListener('touchstart', () => player.play(), { once: true });
                 });
@@ -438,21 +456,17 @@
             updateCarousel();
         }
 
-       function updateCarousel() {
-    const carousel = document.getElementById('carousel');
-    const items = document.querySelectorAll('.carousel-item');
-    
-    // Remove active class from all
-    items.forEach(item => item.classList.remove('active'));
-    
-    // Add active to current index
-    items[currentIndex].classList.add('active');
-    
-    // PERFECT CENTERING - translate exactly to center current image
-    const translateX = -(currentIndex * 85);  // Match flex: 0 0 85vw
-    carousel.style.transform = `translateX(${translateX}vw)`;
-}
-
+        function updateCarousel() {
+            const carousel = document.getElementById('carousel');
+            const items = document.querySelectorAll('.carousel-item');
+            
+            items.forEach(item => item.classList.remove('active'));
+            items[currentIndex].classList.add('active');
+            
+            // FIXED PERFECT CENTERING
+            const translateX = -(currentIndex * 85);
+            carousel.style.transform = `translateX(${translateX}vw)`;
+        }
 
         function setupCarousel() {
             const wrapper = document.querySelector('.carousel-wrapper');
@@ -484,7 +498,6 @@
                 currentX = 0;
             });
 
-            // Mouse support
             wrapper.addEventListener('mousedown', e => {
                 isDragging = true;
                 startX = e.clientX;
@@ -518,16 +531,15 @@
         }
 
         function toggleLetter(show) {
-    const overlay = document.getElementById('letterOverlay');
-    overlay.classList.toggle('active', show);
-    
-    if (show) {
-        setTimeout(() => typeWriter(), 500);
-    }
-}
+            const overlay = document.getElementById('letterOverlay');
+            overlay.classList.toggle('active', show);
+            if (show) {
+                setTimeout(() => typeWriter(), 500);
+            }
+        }
 
-function typeWriter() {
-    const text = `My dearest Sreetoma, 💕
+        function typeWriter() {
+            const text = `My dearest Sreetoma, 💕
 
 Every moment with you feels like a dream I never want to wake from. ✨
 Your smile lights up my darkest days 🌸, your laugh is my favorite melody 🎶, 
@@ -538,21 +550,21 @@ Happy birthday month, my love! 🎂💖 Here's to countless more memories togeth
 
 Forever yours,
 Abir 💍🤍`;
-    
-    let i = 0;
-    const speed = 80;
-    
-    function type() {
-        if (i < text.length) {
-            document.getElementById('typewriter').innerHTML = text.substring(0, i + 1) + '|';
-            i++;
-            setTimeout(type, speed);
-        } else {
-            document.getElementById('typewriter').innerHTML = text;
+            
+            let i = 0;
+            const speed = 80;
+            
+            function type() {
+                if (i < text.length) {
+                    document.getElementById('typewriter').innerHTML = text.substring(0, i + 1) + '|';
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    document.getElementById('typewriter').innerHTML = text;
+                }
+            }
+            type();
         }
-    }
-    type();
-}
 
         function startTimer() {
             const target = new Date("February 10, 2026 00:00:00").getTime();
