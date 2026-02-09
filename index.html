@@ -46,12 +46,22 @@
         }
 
         /* Entrance + Videos */
-        #entrance, #transition-video {
-            position: fixed; inset: 0; z-index: 999;
-            display: flex; align-items: center; justify-content: center;
-            background: #000;
-            transition: opacity 1.2s ease;
-        }
+        #entrance video, #transition-video video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain !important;  /* KEY FIX - no cropping */
+    object-position: center center;
+    max-width: 100vw;
+    max-height: 100vh;
+}
+#entrance, #transition-video {
+    position: fixed; inset: 0; z-index: 999;
+    display: flex; align-items: center; justify-content: center;
+    background: #000;
+    width: 100vw;
+    height: 100vh;
+}
+
         #entrance.hidden, #transition-video.hidden { opacity: 0; pointer-events: none; }
 
         video { width: 100%; height: 100%; object-fit: cover; }
@@ -100,37 +110,84 @@
 
         /* FLAT HORIZONTAL SWIPE GALLERY - PERFECT PHONE CENTERING */
         .carousel-wrapper {
-            width: 100%; max-width: 95vw; height: 65vh; margin: 40px auto;
-            position: relative; overflow: hidden; border-radius: 28px;
-            background: rgba(255,107,157,0.08); backdrop-filter: blur(20px);
-            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
-        }
-        .carousel {
-            display: flex; height: 100%; transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            will-change: transform;
-        }
-        .carousel-item {
-            flex: 0 0 85vw; height: 100%; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; padding: 20px;
-        }
-        .photo-frame {
-            flex: 1; width: 100%; max-width: 320px; position: relative;
-            background: linear-gradient(145deg, rgba(255,255,255,0.15), rgba(255,107,157,0.12));
-            border-radius: 24px; overflow: hidden; border: 3px solid rgba(255,107,157,0.4);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.3);
-            backdrop-filter: blur(15px);
-        }
-        .carousel-item img {
-            width: 100%; height: 100%; object-fit: contain; display: block;
-            border-radius: 20px; transition: all 0.4s ease;
-        }
-        .carousel-item .caption {
-            margin-top: 15px; background: linear-gradient(145deg, rgba(0,0,0,0.8), rgba(255,107,157,0.2));
-            color: #fff; padding: 15px 20px; border-radius: 20px; width: 100%;
-            font-family: 'Playfair Display', serif; font-size: clamp(0.9rem, 3vw, 1.1rem);
-            font-style: italic; text-align: center; font-weight: 400; max-height: 80px;
-            overflow: hidden; border: 1px solid rgba(255,255,255,0.3); box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-        }
+    width: 100%; 
+    height: 65vh; 
+    margin: 40px auto;
+    position: relative; 
+    overflow: hidden; 
+    border-radius: 28px;
+    background: rgba(255,107,157,0.08); 
+    backdrop-filter: blur(20px);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.carousel {
+    display: flex; 
+    height: 100%; 
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    width: max-content;  /* FIXED - allows full width */
+}
+
+.carousel-item {
+    flex: 0 0 85vw; 
+    height: 100%; 
+    display: flex; 
+    flex-direction: column;
+    align-items: center;  /* CENTER IMAGES */
+    justify-content: center; 
+    padding: 20px 10px;  /* REDUCED SIDES */
+}
+
+.photo-frame {
+    flex: 1; 
+    width: 100%; 
+    max-width: 300px;  /* SMALLER MAX */
+    max-height: 100%;
+    position: relative;
+    background: linear-gradient(145deg, rgba(255,255,255,0.15), rgba(255,107,157,0.12));
+    border-radius: 24px; 
+    overflow: hidden; 
+    border: 3px solid rgba(255,107,157,0.4);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;  /* CENTER IMAGE INSIDE FRAME */
+}
+
+.carousel-item img {
+    max-width: 95%; 
+    max-height: 95%; 
+    width: auto; 
+    height: auto; 
+    object-fit: contain; 
+    border-radius: 20px;
+    transition: all 0.4s ease;
+}
+
+.carousel-item .caption {
+    margin-top: 12px; 
+    background: linear-gradient(145deg, rgba(0,0,0,0.8), rgba(255,107,157,0.2));
+    color: #fff; 
+    padding: 12px 15px; 
+    border-radius: 20px; 
+    max-width: 95%;  /* PREVENTS OVERFLOW */
+    font-family: 'Playfair Display', serif; 
+    font-size: clamp(0.8rem, 2.8vw, 1rem);  /* SMALLER FONT */
+    font-style: italic; 
+    text-align: center; 
+    font-weight: 400;
+    overflow: hidden;
+    text-overflow: ellipsis;  /* CUTS LONG TEXT CLEANLY */
+    word-break: break-word;   /* BREAKS LONG WORDS */
+    border: 1px solid rgba(255,255,255,0.3); 
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    line-height: 1.3;
+}
+
         .carousel-item.active {
             .photo-frame {
                 box-shadow: 0 35px 80px rgba(255,107,157,0.5), inset 0 1px 0 rgba(255,255,255,0.5);
@@ -191,12 +248,14 @@
 
         /* Mobile Perfect */
         @media (max-width: 480px) {
-            .carousel-wrapper { height: 70vh; margin: 30px auto; }
-            .carousel-item { flex: 0 0 92vw; padding: 15px; }
-            .hero-title { font-size: 2.9rem; }
-            .pass-card { padding: 2rem 1.5rem; }
-            .letter-paper { padding: 2rem; height: 85vh; }
-        }
+    .carousel-item { flex: 0 0 92vw; padding: 10px 5px; }
+    .carousel-item .caption { 
+        max-width: 92vw; 
+        font-size: clamp(0.75rem, 2.5vw, 0.95rem);
+        padding: 10px 12px;
+    }
+}
+
     </style>
 </head>
 <body>
@@ -271,7 +330,7 @@
 
     <!-- FIXED AUDIO - AUTOPLAY ENABLED -->
     <audio id="player" loop preload="auto">
-        <source src="Untilg.mp3" type="audio/mpeg">
+        <source src="Until.mp3" type="audio/mpeg">
     </audio>
 
     <script>
@@ -379,15 +438,21 @@
             updateCarousel();
         }
 
-        function updateCarousel() {
-            const carousel = document.getElementById('carousel');
-            const items = document.querySelectorAll('.carousel-item');
-            
-            items.forEach(item => item.classList.remove('active'));
-            items[currentIndex].classList.add('active');
-            
-            carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
-        }
+       function updateCarousel() {
+    const carousel = document.getElementById('carousel');
+    const items = document.querySelectorAll('.carousel-item');
+    
+    // Remove active class from all
+    items.forEach(item => item.classList.remove('active'));
+    
+    // Add active to current index
+    items[currentIndex].classList.add('active');
+    
+    // PERFECT CENTERING - translate exactly to center current image
+    const translateX = -(currentIndex * 85);  // Match flex: 0 0 85vw
+    carousel.style.transform = `translateX(${translateX}vw)`;
+}
+
 
         function setupCarousel() {
             const wrapper = document.querySelector('.carousel-wrapper');
@@ -520,4 +585,3 @@ Abir 💍🤍`;
     </script>
 </body>
 </html>
-
