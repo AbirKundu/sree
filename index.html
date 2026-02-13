@@ -19,11 +19,12 @@
             font-family: 'Poppins', sans-serif;
             overflow-x: hidden;
             margin: 0;
-            touch-action: pan-y; /* allow vertical scroll everywhere */
+            touch-action: pan-y;
             height: 100%;
+            position: relative;
         }
 
-        /* Background & Hearts */
+        /* Background & Hearts (background remains) */
         #bg-canvas {
             position: fixed; inset: 0; z-index: -2;
             background: radial-gradient(circle at center, #1a0b2e 0%, #0a0514 100%);
@@ -31,11 +32,36 @@
         .floating-heart {
             position: absolute; color: var(--pink); opacity: 0.35;
             pointer-events: none; animation: floatUp linear infinite;
+            z-index: -1;
         }
         @keyframes floatUp {
             0% { transform: translateY(100vh) rotate(0deg); opacity:0; }
             50% { opacity: 0.7; }
             100% { transform: translateY(-20vh) rotate(360deg); opacity:0; }
+        }
+
+        /* FLOWER RAIN - new element */
+        .flower-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+            overflow: hidden;
+        }
+        .flower {
+            position: absolute;
+            color: #ffb7c5; /* soft pink */
+            font-size: 24px;
+            opacity: 0.7;
+            user-select: none;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 0.9; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0.2; }
         }
 
         /* Countdown bar */
@@ -149,17 +175,17 @@
             50% { text-shadow: 0 0 35px var(--hot-pink); } 
         }
 
-        /* CAROUSEL - perfect swipe + scroll compatibility */
+        /* CAROUSEL */
         .carousel-wrapper {
             width: 100%;
-            overflow-x: auto;          /* allow horizontal swipe */
-            overflow-y: visible;       /* but vertical scroll comes from body */
+            overflow-x: auto;
+            overflow-y: visible;
             -webkit-overflow-scrolling: touch;
             scroll-snap-type: x mandatory;
             padding: 20px 0;
             margin: 20px 0;
             cursor: grab;
-            touch-action: pan-x pan-y; /* both directions possible, but scroll will win if vertical */
+            touch-action: pan-x pan-y;
         }
         .carousel {
             display: flex;
@@ -196,7 +222,7 @@
         .carousel-item img {
             width: 100%;
             height: 100%;
-            object-fit: cover;          /* cover for consistent look */
+            object-fit: cover;
             border-radius: 20px;
             transition: all 0.4s ease;
         }
@@ -243,14 +269,29 @@
             padding: 3rem; box-shadow: 0 30px 100px rgba(255,107,157,0.3);
             position: relative; overflow-y: auto; border: 3px solid rgba(255,107,157,0.3);
         }
-        .typewriter-text {
+        /* Typewriter container */
+        #typewriter {
             font-family: 'Great Vibes', cursive;
             font-size: clamp(1.4rem, 4vw, 1.8rem);
             line-height: 1.6;
             color: #ff2663;
             text-align: center;
             white-space: pre-wrap;
-            overflow: hidden;
+            word-wrap: break-word;
+            border-right: 2px solid transparent; /* no cursor during animation */
+        }
+        .typewriter-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.4em;
+            background-color: #ff2663;
+            margin-left: 2px;
+            vertical-align: middle;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0%,100% { opacity: 1; }
+            50% { opacity: 0; }
         }
         .close-letter {
             position: absolute; top: 20px; right: 25px; background: none;
@@ -269,7 +310,6 @@
             }
         }
 
-        /* fix: allow body scroll */
         body {
             overflow-y: auto;
             overflow-x: hidden;
@@ -287,6 +327,9 @@
     </section>
 
     <div id="bg-canvas"></div>
+    
+    <!-- FLOWER RAIN container (hidden until after transition) -->
+    <div id="flowerRain" class="flower-container" style="display: none;"></div>
 
     <!-- Entrance - 50/50 Split -->
     <section id="entrance">
@@ -320,10 +363,8 @@
             <button class="primary-btn" onclick="toggleLetter(true)">Open My Letter 💌</button>
         </div>
 
-        <!-- NEW: simple arrow hint (optional) -->
         <div style="color:var(--pink); margin-bottom:0.5rem;">← swipe →</div>
 
-        <!-- Carousel wrapper now handles horizontal + body handles vertical -->
         <div class="carousel-wrapper" id="carouselWrapper">
             <div class="carousel" id="carousel"></div>
         </div>
@@ -337,19 +378,7 @@
     <div class="letter-overlay" id="letterOverlay">
         <div class="letter-paper">
             <button class="close-letter" onclick="toggleLetter(false)">×</button>
-            <div class="typewriter-text" id="typewriter">
-                My dearest Sreetoma, 💕
-
-                Every moment with you feels like a dream I never want to wake from. ✨
-                Your smile lights up my darkest days 🌸, your laugh is my favorite melody 🎶, 
-                and your love is the home I've always been searching for. 🏡❤️
-
-                You are my forever ♾️, my always, my everything. 
-                Happy birthday month, my love! 🎂💖 Here's to countless more memories together. 🌟
-
-                Forever yours,
-                Abir 💍🤍
-            </div>
+            <div id="typewriter"></div>
         </div>
     </div>
 
@@ -395,6 +424,8 @@
             "My heart still races every time I see you 😍","And I'll keep choosing you — today, tomorrow, always 💍🤍 sorry ektu besi hoye gese pera nai mone kisu koris na. Manger Nati )"
         ];
 
+        const LETTER_TEXT = `My dearest Sreetoma, 💕\n\nEvery moment with you feels like a dream I never want to wake from. ✨\nYour smile lights up my darkest days 🌸, your laugh is my favorite melody 🎶, \nand your love is the home I've always been searching for. 🏡❤️\n\nYou are my forever ♾️, my always, my everything. \nHappy birthday month, my love! 🎂💖 Here's to countless more memories together. 🌟\n\nForever yours,\nAbir 💍🤍`;
+
         function grantAudio() {
             document.getElementById('permissionGate').style.display = 'none';
             const intro = document.getElementById('introVideo');
@@ -424,6 +455,9 @@
 
             bts.onended = () => {
                 transition.classList.remove('show');
+                // START FLOWER RAIN
+                startFlowerRain();
+                
                 const main = document.getElementById('main-content');
                 main.style.display = 'block';
                 setTimeout(() => main.classList.add('visible'), 100);
@@ -438,11 +472,33 @@
             };
         }
 
+        // FLOWER RAIN function
+        function startFlowerRain() {
+            const container = document.getElementById('flowerRain');
+            container.style.display = 'block';
+            // Clear any previous flowers
+            container.innerHTML = '';
+            const flowerCount = 40;
+            for (let i = 0; i < flowerCount; i++) {
+                const flower = document.createElement('div');
+                flower.className = 'flower';
+                // Random flower emoji or petal symbol
+                const flowers = ['🌸', '🌼', '🌻', '🌺', '🌸', '🌷', '💮', '🏵️'];
+                flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+                flower.style.left = Math.random() * 100 + '%';
+                flower.style.animationDuration = (Math.random() * 5 + 5) + 's'; // 5-10s
+                flower.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                flower.style.opacity = Math.random() * 0.6 + 0.3;
+                flower.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(flower);
+            }
+        }
+
         function init() {
             generateHearts();
             buildCarousel();
             startTimer();
-            setupCarouselScroll();   // new function to sync active + handle scroll
+            setupCarouselScroll();
         }
 
         function buildCarousel() {
@@ -461,11 +517,9 @@
                 `;
             }
             container.innerHTML = html;
-            // after build, set first active
             setActiveFromIndex(0);
         }
 
-        // Sets active class based on index
         function setActiveFromIndex(index) {
             const items = document.querySelectorAll('.carousel-item');
             items.forEach((item, i) => {
@@ -477,24 +531,17 @@
 
         function setupCarouselScroll() {
             const wrapper = document.getElementById('carouselWrapper');
-            const carousel = document.getElementById('carousel');
-
-            // Use scroll event to detect which item is most in view
             wrapper.addEventListener('scroll', () => {
                 const scrollLeft = wrapper.scrollLeft;
-                const itemWidth = wrapper.clientWidth * 0.85 + 15; // approx item + gap
+                const itemWidth = wrapper.clientWidth * 0.85 + 15;
                 const newIndex = Math.round(scrollLeft / itemWidth);
                 if (newIndex >= 0 && newIndex < TOTAL_IMAGES && newIndex !== currentIndex) {
                     setActiveFromIndex(newIndex);
                 }
             });
 
-            // optional: also handle tap on images? We keep swipe purely by scroll, but also add click/tap half prev/next
-            // To maintain tap feature (left/right of image)
             document.querySelectorAll('.carousel-item').forEach((item, idx) => {
                 item.addEventListener('click', (e) => {
-                    // If click is directly on image or caption, but we want to allow vertical scroll,
-                    // only trigger if not a significant drag? But we'll keep it simple.
                     const rect = item.getBoundingClientRect();
                     const clickX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
                     if (!clickX) return;
@@ -504,26 +551,48 @@
                     if (clickX < centerX) targetIndex = (currentIndex - 1 + TOTAL_IMAGES) % TOTAL_IMAGES;
                     else targetIndex = (currentIndex + 1) % TOTAL_IMAGES;
 
-                    // smoothly scroll wrapper to that item
                     const itemWidth = wrapper.clientWidth * 0.85 + 15;
                     wrapper.scrollTo({ left: targetIndex * itemWidth, behavior: 'smooth' });
                     setActiveFromIndex(targetIndex);
                 });
-                
-                // Prevent image dragging interfering
                 item.querySelector('img').addEventListener('mousedown', (e) => e.preventDefault());
             });
-
-            // Also ensure wrapper doesn't trap vertical scroll: already handled by CSS touch-action: pan-x pan-y
         }
 
         function toggleLetter(show) {
             const overlay = document.getElementById('letterOverlay');
             overlay.classList.toggle('active', show);
             if (show) {
-                // reset typewriter
-                document.getElementById('typewriter').innerHTML = `My dearest Sreetoma, 💕\n\nEvery moment with you feels like a dream I never want to wake from. ✨\nYour smile lights up my darkest days 🌸, your laugh is my favorite melody 🎶, \nand your love is the home I've always been searching for. 🏡❤️\n\nYou are my forever ♾️, my always, my everything. \nHappy birthday month, my love! 🎂💖 Here's to countless more memories together. 🌟\n\nForever yours,\nAbir 💍🤍`;
+                // Start typewriter effect
+                typeWriterEffect(LETTER_TEXT, 'typewriter', 50);
+            } else {
+                // reset content for next time (optional)
+                document.getElementById('typewriter').innerHTML = '';
             }
+        }
+
+        // TYPEWRITER FUNCTION
+        function typeWriterEffect(fullText, elementId, speed = 40) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = ''; // clear
+            let i = 0;
+            function type() {
+                if (i < fullText.length) {
+                    // Handle newline as <br> for proper display
+                    let char = fullText.charAt(i);
+                    if (char === '\n') {
+                        element.innerHTML += '<br>';
+                    } else {
+                        element.innerHTML += char;
+                    }
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    // add a blinking cursor at the end (optional)
+                    element.innerHTML += '<span class="typewriter-cursor"></span>';
+                }
+            }
+            type();
         }
 
         function startTimer() {
@@ -554,11 +623,6 @@
                 document.body.appendChild(h);
             }
         }
-
-        // Call after main content visible to ensure carousel active
-        window.addEventListener('load', () => {
-            // if already visible (via direct may not), but fine
-        });
     </script>
 </body>
 </html>
